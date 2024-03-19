@@ -59,4 +59,17 @@ class SequenceTest:
         assertEquals(Empty(), min(Nil()))
         assertEquals(Just(10), min(Cons(100, Cons(10, Cons(50, Nil())))))
 
-    
+    @Test def testFoldLeft() =
+        assertEquals(-16, foldLeft(Cons (3 , Cons (7 , Cons (1 , Cons (5 , Nil () ) ) ) ))(0)(_-_))
+        assertEquals("Ciao mondo", foldLeft(Cons("Ciao", Cons(" mondo", Nil())))("")(_+_))
+
+    @Test def testExtensionMethod() =
+        assertEquals(60, l.sumAsExtensionMethod)
+        assertEquals(Cons(11, Cons(21, Cons(31, Nil()))), l.mapAsExtensionMethod(_ + 1))
+        assertEquals(Cons(20, Cons(30, Nil())), l.filterAsExtensionMethod(_ >= 20))
+        assertEquals(Cons(10, Cons(20, Nil())), l.takeAsExtensionMethod(2))
+        assertEquals(Cons((10, "10"), Cons((20, "20"), Cons((30, "30"), Nil()))), l.zipAsExtensionMethod(Cons("10", Cons("20", Cons("30", Nil())))))
+        assertEquals(Cons(11, Cons(21, Cons(31, Nil()))), l.flatMapAsExtensionMethod(v => Cons(v + 1, Nil())))
+        assertEquals(Cons(11, Cons(21, Cons(31, Nil()))), l.mapImplementedByFlatMapAsExtensionMethod(_ + 1))
+        assertEquals(Cons(20, Cons(30, Nil())), l.filterImplementedByFlatMapAsExtensionMethod(_ >= 20))
+        assertEquals(Just(10), l.minAsExtensionMethod)
