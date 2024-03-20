@@ -1,5 +1,10 @@
 package u03
 
+import u03.Streams.Stream.fill
+import u03.Streams.Stream.pellNumbers
+import u03.Streams.Stream.toList
+import u03.Streams.Stream.take
+
 object Streams extends App :
 
   import Sequences.*
@@ -43,6 +48,18 @@ object Streams extends App :
       case Cons(head, tail) if pred(head()) => cons(head(), takeWhile(tail())(pred))
       case _ => Empty()
 
+    def fill[A](n: Int)(k: A): Stream[A] = n match
+      case base if n == 0 => Empty()
+      case recursive if n > 0  => Cons(() => k, () => fill(n - 1)(k))
+
+    def mapperForPellNumbers(x: Int): Int = x match
+      case 0 => 0
+      case 1 => 1
+      case _ => 2 * mapperForPellNumbers(x - 1) + mapperForPellNumbers(x - 2)
+    
+
+    def pellNumbers: Stream[Int] = map(iterate(0)(_ + 1))(mapperForPellNumbers(_))
+
   end Stream
 
 @main def tryStreams =
@@ -56,3 +73,5 @@ object Streams extends App :
 
   lazy val corec: Stream[Int] = Stream.cons(1, corec) // {1,1,1,..}
   println(Stream.toList(Stream.take(corec)(10))) // [1,1,..,1]
+
+  println("Pell "+ toList(take(pellNumbers)(10)))
